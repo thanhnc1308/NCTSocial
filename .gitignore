@@ -1,0 +1,10 @@
+/client/node_modules
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
+# testing
+/client/coverage
+# production
+/client/build
+
+/server/node_modules
