@@ -1,0 +1,9 @@
+@import '../../assets/style/_variable.scss';
+
+.feed {
+    flex: $FLEX_CENTER;
+
+    .feed-wrapper {
+        padding: 20px;
+    }
+}

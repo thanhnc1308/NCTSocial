@@ -1,5 +1,7 @@
+@import '../../assets/style/_variable.scss';
+
 .topbar-container {
-    height: 50px;
+    height: $TOPBAR_HEIGHT;
     width: 100%;
     background-color: #1877f2;
     display: flex;
@@ -9,7 +11,7 @@
     top: 0;
 
     .topbar-left {
-        flex: 3;
+        flex: $FLEX_LEFT;
 
         .logo {
             font-size: 24px;
@@ -20,7 +22,7 @@
     }
 
     .topbar-center {
-        flex: 5;
+        flex: $FLEX_CENTER;
 
         .searchbar {
             width: 100%;
@@ -44,7 +46,7 @@
     }
 
     .topbar-right {
-        flex: 4;
+        flex: $FLEX_RIGHT;
         justify-content: space-around;
         color: white;
 
