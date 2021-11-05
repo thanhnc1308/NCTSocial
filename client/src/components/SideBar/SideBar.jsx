@@ -45,7 +45,7 @@ export default function SideBar() {
                         ))
                     }
                 </ul>
-                <button className="sidebar-showmore">Show More</button>
+                <button className="sidebar-seemore">See More</button>
                 <hr className="sidebar-hr" />
                 <ul className="sidebar-friendlist reset-ul">
                     {
