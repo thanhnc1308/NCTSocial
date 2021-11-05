@@ -1,0 +1,13 @@
+.sidebar-friend {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .sidebar-friend-img {
+        margin-right: 10px;
+        object-fit: cover; //NCThanh
+    }
+    .sidebar-friendname {
+
+    }
+}

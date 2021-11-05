@@ -15,7 +15,9 @@
 .sidebar {
     flex: $FLEX_LEFT;
     height: calc(100vh - $TOPBAR_HEIGHT);
-    overflow-y: scroll; //NCThanh
+    overflow-y: scroll;
+    position: sticky; // NCThanh: Make sidebar sticky when scrolling
+    top: $TOPBAR_HEIGHT;
 
     .sidebar-wrapper {
         padding: 20px;
@@ -45,19 +47,19 @@
         }
 
         .sidebar-friendlist {
-            .sidebar-friend {
-                display: flex;
-                align-items: center;
-                margin-bottom: 15px;
+            // .sidebar-friend {
+            //     display: flex;
+            //     align-items: center;
+            //     margin-bottom: 15px;
 
-                .sidebar-friend-img {
-                    margin-right: 10px;
-                    object-fit: cover; //NCThanh
-                }
-                .sidebar-friendname {
+            //     .sidebar-friend-img {
+            //         margin-right: 10px;
+            //         object-fit: cover; //NCThanh
+            //     }
+            //     .sidebar-friendname {
 
-                }
-            }
+            //     }
+            // }
         }
     }
 }

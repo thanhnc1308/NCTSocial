@@ -1,5 +1,7 @@
-import './side-bar.scss';
+import './sidebar.scss';
 import { RssFeed, HelpOutline, WorkOutline, Event, School } from '@mui/icons-material';
+import { Users } from "../../fakeData";
+import CloseFriend from '../CloseFriend/CloseFriend';
 
 export default function SideBar() {
     const sidebarListItems = [
@@ -47,11 +49,8 @@ export default function SideBar() {
                 <hr className="sidebar-hr" />
                 <ul className="sidebar-friendlist reset-ul">
                     {
-                        [1,2,3,4,5,6,7,8,9].map(i => (
-                            <li key={i} className="sidebar-friend">
-                                <img src="/assets/person/2.jpeg" alt="" className="sidebar-friend-img img-32 rounded" />
-                                <span className="sidebar-friendname">Jack Ng</span>
-                            </li>
+                        Users.map(user => (
+                            <CloseFriend key={user.id} user={user} />
                         ))
                     }
                 </ul>
