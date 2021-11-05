@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.border-none {
+    border: none;
+}
