@@ -1,11 +1,16 @@
 import './top-bar.scss';
 import { Search, Chat, Notifications, Person } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 export default function TopBar() {
+    const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
+
     return (
         <div className="topbar-container">
             <div className="topbar-left">
-                <span className="logo pointer">NCT</span>
+                <Link to="/" className="text-decoration-none">
+                    <span className="logo pointer">NCT</span>
+                </Link>
             </div>
             <div className="topbar-center">
                 <div className="searchbar d-flex align-items-center">
@@ -38,7 +43,9 @@ export default function TopBar() {
                         </span>
                     </div>
                 </div>
-                <img src="/assets/person/1.jpeg" alt="" className="topbar-image" />
+                <Link to="/profile/test" className="text-decoration-none">
+                    <img src={`${PUBLIC_FOLDER}/person/1.jpeg`} alt="" className="topbar-image" />
+                </Link>
             </div>
         </div>
     )

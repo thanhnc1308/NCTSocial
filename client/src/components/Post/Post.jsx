@@ -4,6 +4,7 @@ import { Users } from "../../fakeData";
 import { useState } from "react";
 
 export default function Post({ post }) {
+    const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [like, setLike] = useState(post.like)
     const [isLiked, setIsLiked] = useState(false)
 
@@ -19,7 +20,7 @@ export default function Post({ post }) {
                     <div className="post-top-left">
                         <img
                             className="post-profile-img"
-                            src={Users.filter((u) => u.id === post?.userId)[0].profilePicture}
+                            src={`${PUBLIC_FOLDER}${Users.find((u) => u.id === post?.userId).profilePicture}`}
                             alt=""
                         />
                         <span className="post-username">
@@ -33,12 +34,12 @@ export default function Post({ post }) {
                 </div>
                 <div className="post-center">
                     <span className="post-text">{post?.desc}</span>
-                    <img className="post-img" src={post.photo} alt="" />
+                    <img className="post-img" src={`${PUBLIC_FOLDER}${post.photo}`} alt="" />
                 </div>
                 <div className="post-bottom">
                     <div className="post-bottom-left">
-                        <img className="like-icon" src="assets/like.png" onClick={likeHandler} alt="" />
-                        <img className="like-icon" src="assets/heart.png" onClick={likeHandler} alt="" />
+                        <img className="like-icon" src={`${PUBLIC_FOLDER}/like.png`} onClick={likeHandler} alt="" />
+                        <img className="like-icon" src={`${PUBLIC_FOLDER}/heart.png`} onClick={likeHandler} alt="" />
                         <span className="post-like-counter">{like} people liked it</span>
                     </div>
                     <div className="post-bottom-right">

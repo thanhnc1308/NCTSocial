@@ -2,6 +2,7 @@ import './share.scss';
 import {PermMedia, Label,Room, EmojiEmotions} from '@mui/icons-material';
 
 export default function Share() {
+    const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const shareOptions = [
         {
             id: 1,
@@ -29,7 +30,7 @@ export default function Share() {
         <div className="share">
             <div className="share-wrapper">
                 <div className="share-top">
-                    <img src="/assets/person/1.jpeg" alt="" className="share-profile-img rounded img-32" />
+                    <img src={`${PUBLIC_FOLDER}/person/1.jpeg`} alt="" className="share-profile-img rounded img-32" />
                     <input type="text" placeholder="What's in your mind?" className="share-input" />
                 </div>
                 <hr className="share-hr" />
