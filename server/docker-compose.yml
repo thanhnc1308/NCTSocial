@@ -5,8 +5,11 @@ services:
   mongo:
     image: mongo
     container_name: mongodb_container
+    # If you need to connect to your db from outside this container 
+    # network_mode: host
+    command: mongod
     environment:
-      - MONGO_INITDB_DATABASE=social-media-app
+      - MONGO_INITDB_DATABASE=social_media_app2
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
     ports:
@@ -19,6 +22,7 @@ services:
       # named volumes
       - mongodb:/data/db
       - mongoconfig:/data/configdb
+      - $PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/
 
   mongo-express:
     image: mongo-express
