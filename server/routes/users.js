@@ -3,9 +3,10 @@ const User = require('../models/User');
 const Log = require('../utils/Log');
 const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        res.status(200).json('');
+        const allUsers = await User.find({});
+        res.status(200).json(allUsers);
     } catch (e) {
         Log.exception(e);
         res.status(500).json(e);
@@ -50,6 +51,32 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+/**
+ * Get friends
+ */
+router.get("/friends/:userId", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        const friends = await Promise.all(
+            user.followings.map((friendId) => {
+                return User.findById(friendId);
+            })
+        );
+        let friendList = [];
+        friends.map((friend) => {
+            const { _id, username, profilePicture } = friend;
+            friendList.push({ _id, username, profilePicture });
+        });
+        res.status(200).json(friendList)
+    } catch (e) {
+        Log.exception(e);
+        res.status(500).json(e);
+    }
+});
+
+/**
+ * Follow a user
+ */
 router.put('/:id/follow', async (req, res) => {
     try {
         const { id } = req.params;
@@ -64,6 +91,36 @@ router.put('/:id/follow', async (req, res) => {
             })
             await currentUser.updateOne({
                 $push: {
+                    following: followedUserId
+                }
+            })
+            res.status(200).json('Success');
+        } else {
+            res.status(403).json('You already followed this user');
+        }
+    } catch (e) {
+        Log.exception(e);
+        res.status(500).json(e);
+    }
+})
+
+/**
+ * Unfollow a user
+ */
+router.put('/:id/follow', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { followedUserId } = req.body;
+        const currentUser = await User.findById(id);
+        const followedUser = await User.findById(followUserId);
+        if (!followedUser.followers.includes(id)) {
+            await followedUser.updateOne({
+                $pull: {
+                    followers: id
+                }
+            })
+            await currentUser.updateOne({
+                $pull: {
                     following: followedUserId
                 }
             })
