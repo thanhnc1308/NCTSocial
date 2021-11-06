@@ -1,6 +1,5 @@
 import "./post.scss";
 import { MoreVert } from '@mui/icons-material';
-import { Users } from "../../fakeData";
 import { useState } from "react";
 
 export default function Post({ post }) {
@@ -20,11 +19,11 @@ export default function Post({ post }) {
                     <div className="post-top-left">
                         <img
                             className="post-profile-img"
-                            src={`${PUBLIC_FOLDER}${Users.find((u) => u.id === post?.userId).profilePicture}`}
+                            src={`${PUBLIC_FOLDER}/${'noAvatar.png'}`}
                             alt=""
                         />
                         <span className="post-username">
-                            {Users.filter((u) => u.id === post?.userId)[0].username}
+                            {'username'}
                         </span>
                         <span className="post-date">{post.date}</span>
                         </div>

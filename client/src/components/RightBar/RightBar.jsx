@@ -1,9 +1,21 @@
 import "./rightbar.scss";
-import { Users } from "../../fakeData";
 import Online from "../Online/Online";
+import { useEffect, useState } from "react";
+import UserAPI from '../../api/UserAPI';
 
 export default function Rightbar({ profile }) {
+    const userAPI = new UserAPI();
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [friends, setFriends] = useState([]);
+
+    // Fetch posts when finishing rendering Feed component
+    useEffect(() => {
+        const fetchFriends = async () => {
+            const data = await userAPI.getAll();
+            setFriends(data);
+        }
+        fetchFriends();
+    }, [])
 
     const HomeRightbar = () => {
         return (
@@ -18,8 +30,8 @@ export default function Rightbar({ profile }) {
                 <h4 className="rightbar-title">Online Friends</h4>
                 <ul className="rightbar-friendlist">
                     {
-                        Users.map((u) => (
-                            <Online key={u.id} user={u} />
+                        friends.map((u) => (
+                            <Online key={u._id} user={u} />
                         ))
                     }
                 </ul>

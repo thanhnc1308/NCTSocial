@@ -1,9 +1,21 @@
 import './sidebar.scss';
 import { RssFeed, HelpOutline, WorkOutline, Event, School } from '@mui/icons-material';
-import { Users } from "../../fakeData";
 import CloseFriend from '../CloseFriend/CloseFriend';
+import { useEffect, useState } from 'react';
+import UserAPI from '../../api/UserAPI';
 
 export default function SideBar() {
+    const userAPI = new UserAPI();
+    const [friends, setFriends] = useState([]);
+
+    // Fetch posts when finishing rendering Feed component
+    useEffect(() => {
+        const fetchFriends = async () => {
+            const data = await userAPI.getAll();
+            setFriends(data);
+        }
+        fetchFriends();
+    }, [])
     const sidebarListItems = [
         {
             id: 1,
@@ -49,7 +61,7 @@ export default function SideBar() {
                 <hr className="sidebar-hr" />
                 <ul className="sidebar-friendlist reset-ul">
                     {
-                        Users.map(user => (
+                        friends.map(user => (
                             <CloseFriend key={user.id} user={user} />
                         ))
                     }
