@@ -1,19 +1,30 @@
 import "./post.scss";
 import { MoreVert } from '@mui/icons-material';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { format } from 'timeago.js';
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
-
+import { Log } from '../../utils/Log';
+import PostAPI from "../../api/PostAPI";
 
 export default function Post({ post }) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [like, setLike] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
     const { user } = useContext(AuthContext);
+    const postAPI = new PostAPI();
 
-    const likeHandler = () => {
-        setLike(isLiked ? like-1 : like+1)
-        setIsLiked(!isLiked)
+    useEffect(() => {
+        setIsLiked(post.likes.includes(user._id));
+    }, [user._id, post.likes])
+
+    const handleClickLike = async () => {
+        try {
+            postAPI.toggleLike(post._id, user._id);
+            setLike(isLiked ? like-1 : like+1)
+            setIsLiked(!isLiked)
+        } catch (e) {
+            Log.exception(e);
+        }
     }
 
     return (
@@ -41,8 +52,8 @@ export default function Post({ post }) {
                 </div>
                 <div className="post-bottom">
                     <div className="post-bottom-left">
-                        <img className="like-icon" src={`${PUBLIC_FOLDER}/like.png`} onClick={likeHandler} alt="" />
-                        <img className="like-icon" src={`${PUBLIC_FOLDER}/heart.png`} onClick={likeHandler} alt="" />
+                        <img className="like-icon" src={`${PUBLIC_FOLDER}/like.png`} onClick={handleClickLike} alt="" />
+                        <img className="like-icon" src={`${PUBLIC_FOLDER}/heart.png`} onClick={handleClickLike} alt="" />
                         <span className="post-like-counter">{like} people liked it</span>
                     </div>
                     <div className="post-bottom-right">
