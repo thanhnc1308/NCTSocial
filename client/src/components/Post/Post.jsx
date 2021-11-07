@@ -1,11 +1,15 @@
 import "./post.scss";
 import { MoreVert } from '@mui/icons-material';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { format } from 'timeago.js';
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+
 
 export default function Post({ post }) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
-    const [like, setLike] = useState(post.like)
-    const [isLiked, setIsLiked] = useState(false)
+    const [like, setLike] = useState(post.likes.length);
+    const [isLiked, setIsLiked] = useState(false);
+    const { user } = useContext(AuthContext);
 
     const likeHandler = () => {
         setLike(isLiked ? like-1 : like+1)
@@ -19,13 +23,13 @@ export default function Post({ post }) {
                     <div className="post-top-left">
                         <img
                             className="post-profile-img"
-                            src={`${PUBLIC_FOLDER}/${'noAvatar.png'}`}
+                            src={`${PUBLIC_FOLDER}/${user.profilePicture || 'noAvatar.png'}`}
                             alt=""
                         />
                         <span className="post-username">
-                            {'username'}
+                            {user.username || 'username'}
                         </span>
-                        <span className="post-date">{post.date}</span>
+                        <span className="post-date">{format(post.createdAt)}</span>
                         </div>
                     <div className="post-top-right">
                     <MoreVert />

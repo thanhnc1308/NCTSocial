@@ -39,7 +39,7 @@ router.get('/generate', async (req, res) => {
                 const newPost = new Post({
                     userId: user._id,
                     desc: `This is a description of post ${i} of ${user.username}`,
-                    photo: "/post/1.jpeg"
+                    photo: `/post/${i}.jpeg`
                 })
                 await newPost.save();
             }
