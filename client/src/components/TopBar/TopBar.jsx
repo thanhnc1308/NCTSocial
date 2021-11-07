@@ -33,10 +33,12 @@ export default function TopBar() {
                         </span>
                     </div>
                     <div className="topbar-icon-item pointer">
-                        <Chat />
-                        <span className="topbar-icon-badge">
-                            1
-                        </span>
+                        <Link to="/messenger" style={{ color: 'white' }} className="text-decoration-none">
+                            <Chat />
+                            <span className="topbar-icon-badge">
+                                1
+                            </span>
+                        </Link>
                     </div>
                     <div className="topbar-icon-item pointer">
                         <Notifications />
