@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import UserAPI from '../../api/UserAPI';
 
 export default function Rightbar({ profile }) {
-    const userAPI = new UserAPI();
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [friends, setFriends] = useState([]);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
         const fetchFriends = async () => {
+            const userAPI = new UserAPI();
             const data = await userAPI.getAll();
             setFriends(data);
         }

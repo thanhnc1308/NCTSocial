@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import UserAPI from '../../api/UserAPI';
 
 export default function SideBar() {
-    const userAPI = new UserAPI();
     const [friends, setFriends] = useState([]);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
         const fetchFriends = async () => {
+            const userAPI = new UserAPI();
             const data = await userAPI.getAll();
             setFriends(data);
         }
@@ -18,27 +18,27 @@ export default function SideBar() {
     }, [])
     const sidebarListItems = [
         {
-            id: 1,
+            _id: 1,
             text: 'News Feed',
             icon: <RssFeed className="sidebar-icon" />
         },
         {
-            id: 2,
+            _id: 2,
             text: 'Questions',
             icon: <HelpOutline className="sidebar-icon" />
         },
         {
-            id: 3,
+            _id: 3,
             text: 'Location',
             icon: <WorkOutline className="sidebar-icon" />
         },
         {
-            id: 4,
+            _id: 4,
             text: 'Events',
             icon: <Event className="sidebar-icon" />
         },
         {
-            id: 5,
+            _id: 5,
             text: 'Courses',
             icon: <School className="sidebar-icon" />
         },
@@ -50,7 +50,7 @@ export default function SideBar() {
                 <ul className="sidebar-list reset-ul">
                     {
                         sidebarListItems.map(item => (
-                            <li key={item.id} className="sidebar-list-item">
+                            <li key={item._id} className="sidebar-list-item">
                                 {item.icon}
                                 <span className="sidebar-list-item-text">{item.text}</span>
                             </li>
@@ -62,7 +62,7 @@ export default function SideBar() {
                 <ul className="sidebar-friendlist reset-ul">
                     {
                         friends.map(user => (
-                            <CloseFriend key={user.id} user={user} />
+                            <CloseFriend key={user._id} user={user} />
                         ))
                     }
                 </ul>

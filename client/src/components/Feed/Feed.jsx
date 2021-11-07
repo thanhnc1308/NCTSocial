@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import PostAPI from '../../api/PostAPI.js';
 
 export default function Feed() {
-    const postAPI = new PostAPI()
     const [posts, setPost] = useState([]);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
         const fetchPosts = async () => {
-            const data = await postAPI.getAll();
+            const postAPI = new PostAPI()
+            const data = await postAPI.getTimelinePosts('618660acfca3d53d9270b51e');
             setPost(data);
         }
         fetchPosts();
