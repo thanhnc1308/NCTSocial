@@ -66,6 +66,14 @@
           font-size: 20px;
           font-weight: 500;
           cursor: pointer;
+
+          &:focus {
+            outline: none; // NCThanh: hide outline when click
+          }
+
+          &:disabled {
+            cursor: not-allowed; // NCThanh: not allow to click
+          }
       }
 
       .login-forgot{

@@ -21,7 +21,7 @@ export default class BaseAPI {
         return this.prefix;
     }
 
-    request(url, method, payload) {
+    request({ url, method, payload }) {
         return this.service.request({
             url: this.getUrl() + url,
             method: method,
