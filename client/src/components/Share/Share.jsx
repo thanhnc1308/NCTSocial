@@ -1,5 +1,5 @@
 import './share.scss';
-import {PermMedia, Label,Room, EmojiEmotions} from '@mui/icons-material';
+import {PermMedia, Label,Room, EmojiEmotions, Cancel } from '@mui/icons-material';
 import { useContext, useRef, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
@@ -52,6 +52,14 @@ export default function Share() {
                     <input ref={refDesc} type="text" placeholder={`What's in your mind, ${user.username}?`} className="share-input" />
                 </div>
                 <hr className="share-hr" />
+                {
+                    file && (
+                        <div className="share-img-container">
+                            <img className="share-img" src={URL.createObjectURL(file)} alt="" />
+                            <Cancel className="share-cancel-img" onClick={() => setFile(null)} />
+                        </div>
+                    )
+                }
                 <form onSubmit={handleSubmit} className="share-bottom">
                     <div className="share-options">
                         {/* NCThanh click to the label will trigger click to file */}

@@ -1,21 +1,29 @@
 import './sidebar.scss';
 import { RssFeed, HelpOutline, WorkOutline, Event, School } from '@mui/icons-material';
 import CloseFriend from '../CloseFriend/CloseFriend';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import UserAPI from '../../api/UserAPI';
+import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { Log } from '../../utils/Log';
+import { Link } from 'react-router-dom';
 
 export default function SideBar() {
     const [friends, setFriends] = useState([]);
+    const { user } = useContext(AuthContext);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
-        const fetchFriends = async () => {
-            const userAPI = new UserAPI();
-            const data = await userAPI.getAll();
-            setFriends(data);
+        const fetchUsers = async () => {
+            try {
+                const userAPI = new UserAPI();
+                const data = await userAPI.getAll();
+                setFriends(data);
+            } catch (e) {
+                Log.exception(e);
+            }
         }
-        fetchFriends();
-    }, [])
+        fetchUsers();
+    }, [user._id])
     const sidebarListItems = [
         {
             _id: 1,
@@ -62,7 +70,9 @@ export default function SideBar() {
                 <ul className="sidebar-friendlist reset-ul">
                     {
                         friends.map(user => (
-                            <CloseFriend key={user._id} user={user} />
+                            <Link to={`/profile/${user._id}`} key={user._id} className="text-decoration-none" >
+                                <CloseFriend user={user} />
+                            </Link>
                         ))
                     }
                 </ul>

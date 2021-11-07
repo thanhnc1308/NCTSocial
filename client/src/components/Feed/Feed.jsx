@@ -5,23 +5,24 @@ import { useContext, useEffect, useState } from 'react';
 import PostAPI from '../../api/PostAPI.js';
 import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 
-export default function Feed() {
+export default function Feed({ userId }) {
     const [posts, setPost] = useState([]);
-    const { user } = useContext(AuthContext);
+    const { user: currentUser } = useContext(AuthContext);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
         const fetchPosts = async () => {
             const postAPI = new PostAPI()
-            const data = await postAPI.getTimelinePosts(user._id);
+            const id = userId || currentUser._id;
+            const data = await postAPI.getTimelinePosts(id);
             setPost(data);
         }
         fetchPosts();
-    }, [user._id])
+    }, [userId, currentUser._id])
     return (
         <div className="feed">
             <div className="feed-wrapper">
-                <Share/>
+                { (!userId || userId === currentUser._id) && <Share/> }
                 {
                     posts.map((p) => (
                         <Post key={p._id} post={p} />

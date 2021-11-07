@@ -27,7 +27,8 @@ router.get('/generate', async (req, res) => {
                 username: `ncthanh${i}`,
                 email: `ncthanh${i}@gmail.com`,
                 profilePicture: `person/${i}.jpeg`,
-                password: hashedPassword
+                password: hashedPassword,
+                desc: `desc of user ncthanh${i}`
             })
             const user = await newUser.save();
             users.push(user);

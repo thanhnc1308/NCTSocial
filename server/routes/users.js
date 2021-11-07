@@ -54,7 +54,7 @@ router.delete('/:id', async (req, res) => {
 /**
  * Get friends
  */
-router.get("/friends/:userId", async (req, res) => {
+router.get("/:userId/friends", async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         const friends = await Promise.all(
@@ -82,7 +82,7 @@ router.put('/:id/follow', async (req, res) => {
         const { id } = req.params;
         const { followedUserId } = req.body;
         const currentUser = await User.findById(id);
-        const followedUser = await User.findById(followUserId);
+        const followedUser = await User.findById(followedUserId);
         if (!followedUser.followers.includes(id)) {
             await followedUser.updateOne({
                 $push: {
@@ -91,7 +91,7 @@ router.put('/:id/follow', async (req, res) => {
             })
             await currentUser.updateOne({
                 $push: {
-                    following: followedUserId
+                    followings: followedUserId
                 }
             })
             res.status(200).json('Success');
@@ -107,12 +107,12 @@ router.put('/:id/follow', async (req, res) => {
 /**
  * Unfollow a user
  */
-router.put('/:id/follow', async (req, res) => {
+router.put('/:id/unfollow', async (req, res) => {
     try {
         const { id } = req.params;
         const { followedUserId } = req.body;
         const currentUser = await User.findById(id);
-        const followedUser = await User.findById(followUserId);
+        const followedUser = await User.findById(followedUserId);
         if (!followedUser.followers.includes(id)) {
             await followedUser.updateOne({
                 $pull: {
@@ -121,7 +121,7 @@ router.put('/:id/follow', async (req, res) => {
             })
             await currentUser.updateOne({
                 $pull: {
-                    following: followedUserId
+                    followings: followedUserId
                 }
             })
             res.status(200).json('Success');
