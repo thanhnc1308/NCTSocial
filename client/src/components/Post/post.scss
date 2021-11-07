@@ -61,6 +61,10 @@
                     height: 24px;
                     margin-right: 5px;
                     cursor: pointer;
+
+                    &.liked {
+                        color: blue;
+                    }
                 }
 
                 .post-like-counter{

@@ -1,5 +1,5 @@
 import "./post.scss";
-import { MoreVert } from '@mui/icons-material';
+import { MoreVert, ThumbUp } from '@mui/icons-material';
 import { useContext, useEffect, useState } from "react";
 import { format } from 'timeago.js';
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
@@ -52,8 +52,7 @@ export default function Post({ post }) {
                 </div>
                 <div className="post-bottom">
                     <div className="post-bottom-left">
-                        <img className="like-icon" src={`${PUBLIC_FOLDER}/like.png`} onClick={handleClickLike} alt="" />
-                        <img className="like-icon" src={`${PUBLIC_FOLDER}/heart.png`} onClick={handleClickLike} alt="" />
+                        <ThumbUp className={`like-icon ${isLiked ? 'liked' : ''}`} onClick={handleClickLike} />
                         <span className="post-like-counter">{like} people liked it</span>
                     </div>
                     <div className="post-bottom-right">
