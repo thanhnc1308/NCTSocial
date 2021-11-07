@@ -34,7 +34,7 @@ export default function Post({ post }) {
                     <div className="post-top-left">
                         <img
                             className="post-profile-img"
-                            src={`${PUBLIC_FOLDER}/${user.profilePicture || 'noAvatar.png'}`}
+                            src={`${PUBLIC_FOLDER}/${user.profilePicture || 'person/noAvatar.png'}`}
                             alt=""
                         />
                         <span className="post-username">
@@ -48,7 +48,7 @@ export default function Post({ post }) {
                 </div>
                 <div className="post-center">
                     <span className="post-text">{post?.desc}</span>
-                    <img className="post-img" src={`${PUBLIC_FOLDER}${post.photo}`} alt="" />
+                    { post.photo && <img className="post-img" src={`${PUBLIC_FOLDER}/${post.photo}`} alt="" /> }
                 </div>
                 <div className="post-bottom">
                     <div className="post-bottom-left">

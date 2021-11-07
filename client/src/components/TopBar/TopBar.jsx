@@ -46,7 +46,7 @@ export default function TopBar() {
                     </div>
                 </div>
                 <Link to={`/profile/${user._id}`} className="text-decoration-none">
-                    <img src={`${PUBLIC_FOLDER}/${user.profilePicture || 'noAvatar.png'}`} alt="" className="topbar-image" />
+                    <img src={`${PUBLIC_FOLDER}/${user.profilePicture || 'person/noAvatar.png'}`} alt="" className="topbar-image" />
                 </Link>
             </div>
         </div>

@@ -2,6 +2,7 @@
  * Class handles RESTful API request in client
  */
 import axios from 'axios';
+import { Log } from '../utils/Log';
 
 class HttpClient {
     instance = null
@@ -35,7 +36,7 @@ class HttpClient {
             },
             error => {
                 // do something with request error
-                console.log(error); // for debug
+                Log.exception(error); // for debug
                 return Promise.reject(error);
             }
         );
@@ -86,7 +87,7 @@ class HttpClient {
             }
         },
         error => {
-            console.log("err" + error); // for debug
+            Log.exception("err" + error); // for debug
             // Message({
             //     message: error.message,
             //     type: "error",

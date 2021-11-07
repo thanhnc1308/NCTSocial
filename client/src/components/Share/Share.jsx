@@ -1,52 +1,80 @@
 import './share.scss';
 import {PermMedia, Label,Room, EmojiEmotions} from '@mui/icons-material';
+import { useContext, useRef, useState } from 'react';
+import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { Log } from '../../utils/Log';
+import PostAPI from '../../api/PostAPI';
+import FileAPI from '../../api/FileAPI';
 
 export default function Share() {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
-    const shareOptions = [
-        {
-            id: 1,
-            text: 'Photo or Video',
-            icon: <PermMedia className="share-icon" />
-        },
-        {
-            id: 2,
-            text: 'Tag',
-            icon: <Label className="share-icon" />
-        },
-        {
-            id: 3,
-            text: 'Location',
-            icon: <Room className="share-icon" />
-        },
-        {
-            id: 4,
-            text: 'Feelings',
-            icon: <EmojiEmotions className="share-icon" />
-        },
-    ]
+    const refDesc = useRef();
+    const { user } = useContext(AuthContext);
+    const [file, setFile] = useState(null);
+    const postAPI = new PostAPI();
+    const fileAPI = new FileAPI();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let photo = '';
+        if (file) {
+            const data = new FormData();
+            data.append('file', file);
+            try {
+                const res = await fileAPI.upload(data);
+                if (res && res.filename) {
+                    photo = res.filename;
+                }
+            } catch (e) {
+                Log.exception(e);
+                return;
+            }
+        }
+        try {
+            const newPost = {
+                userId: user._id,
+                desc: refDesc.current.value,
+                photo
+            }
+            const res = await postAPI.post(newPost);
+            if (res) {
+                console.log(res);
+            }
+        } catch (e) {
+            Log.exception(e);
+        }
+    }
 
     return (
         <div className="share">
             <div className="share-wrapper">
                 <div className="share-top">
-                    <img src={`${PUBLIC_FOLDER}/person/1.jpeg`} alt="" className="share-profile-img rounded img-32" />
-                    <input type="text" placeholder="What's in your mind?" className="share-input" />
+                    <img src={`${PUBLIC_FOLDER}/${user.userProfile || 'person/noAvatar.png'}`} alt="" className="share-profile-img rounded img-32" />
+                    <input ref={refDesc} type="text" placeholder={`What's in your mind, ${user.username}?`} className="share-input" />
                 </div>
                 <hr className="share-hr" />
-                <div className="share-bottom">
+                <form onSubmit={handleSubmit} className="share-bottom">
                     <div className="share-options">
-                        {
-                            shareOptions.map(option => (
-                                <div key={option.id} className="share-option">
-                                    {option.icon}
-                                    <span className="share-option-text">{option.text}</span>
-                                </div>
-                            ))
-                        }
+                        {/* NCThanh click to the label will trigger click to file */}
+                        <label htmlFor="file" className="share-option">
+                            <PermMedia className="share-icon" />
+                            <span className="share-option-text">Photo or Video</span>
+                            <input onChange={e => {setFile(e.target.files[0])}} type="file" id="file" accept=".jpg,.jpeg,.png" className="d-none" />
+                        </label>
+                        <div className="share-option">
+                            <Label className="share-icon" />
+                            <span className="share-option-text">Tag</span>
+                        </div>
+                        <div className="share-option">
+                            <Room className="share-icon" />
+                            <span className="share-option-text">Location</span>
+                        </div>
+                        <div className="share-option">
+                            <EmojiEmotions className="share-icon" />
+                            <span className="share-option-text">Feelings</span>
+                        </div>
                     </div>
-                    <button className="share-button">Share</button>
-                </div>
+                    <button type="submit" className="share-button">Share</button>
+                </form>
             </div>
         </div>
     )

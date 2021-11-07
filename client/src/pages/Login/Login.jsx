@@ -11,7 +11,7 @@ export default function Login() {
   // as much as possible
   const refEmail = useRef();
   const refPassword = useRef();
-  const { user, isFetching, dispatch } = useContext(AuthContext);
+  const { isFetching, dispatch } = useContext(AuthContext);
   const authAPI = new AuthAPI();
 
   useEffect(() => {
@@ -28,8 +28,6 @@ export default function Login() {
       password
     }, dispatch)
   }
-
-  console.log(user);
 
   return (
     <div className="login">

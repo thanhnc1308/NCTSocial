@@ -26,7 +26,7 @@ router.get('/generate', async (req, res) => {
             const newUser = new User({
                 username: `ncthanh${i}`,
                 email: `ncthanh${i}@gmail.com`,
-                profilePicture: `/person/${i}.jpeg`,
+                profilePicture: `person/${i}.jpeg`,
                 password: hashedPassword
             })
             const user = await newUser.save();
@@ -39,7 +39,7 @@ router.get('/generate', async (req, res) => {
                 const newPost = new Post({
                     userId: user._id,
                     desc: `This is a description of post ${i} of ${user.username}`,
-                    photo: `/post/${i}.jpeg`
+                    photo: `post/${i}.jpeg`
                 })
                 await newPost.save();
             }

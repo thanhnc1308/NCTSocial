@@ -9,7 +9,6 @@ export default function Login(props) {
     function handleSubmit(e) {
         e.preventDefault();
         onIdSubmit(idRef.current.value);
-        console.log(idRef);
     }
 
     function createNewId() {

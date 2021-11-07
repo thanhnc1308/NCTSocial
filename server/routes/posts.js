@@ -47,10 +47,6 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id/toggle_like", async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        console.log(req.body.userId);
-        console.log(post.likes);
-        console.log(post);
-        console.log(req.params.id);
         if (!post.likes.includes(req.body.userId)) {
             await post.updateOne({ $push: { likes: req.body.userId } });
             res.status(200).json("The post has been liked");
@@ -83,10 +79,7 @@ router.get("/:id", async (req, res) => {
 router.get("/timeline/:userId", async (req, res) => {
     try {
         const currentUser = await User.findById(req.params.userId);
-        console.log(currentUser);
-        console.log(req.params.userId);
         const userPosts = await Post.find({ userId: currentUser._id });
-        console.log(userPosts);
         // const friendPosts = await Promise.all(
         //     currentUser.followings.map((friendId) => {
         //         return Post.find({ userId: friendId });
@@ -115,9 +108,7 @@ router.get("/timeline/:userId", async (req, res) => {
  */
 router.get("/", async (req, res) => {
     try {
-        console.log('1');
         const posts = await Post.find({});
-        console.log(posts);
         res.status(200).json(posts);
     } catch (e) {
         Log.exception(e);
