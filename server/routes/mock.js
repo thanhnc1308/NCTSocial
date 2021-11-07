@@ -24,8 +24,8 @@ router.get('/generate', async (req, res) => {
         const hashedPassword = await bcrypt.hash('123456', salt);
         for (let i = 1; i <= 10; ++i) {
             const newUser = new User({
-                username: `username_${i}`,
-                email: `email_${i}`,
+                username: `ncthanh${i}`,
+                email: `ncthanh${i}@gmail.com`,
                 profilePicture: `/person/${i}.jpeg`,
                 password: hashedPassword
             })
