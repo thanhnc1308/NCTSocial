@@ -6,12 +6,15 @@ import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
 import { Link } from 'react-router-dom';
 import { Add, Remove } from '@mui/icons-material';
+import ConversationAPI from "../../api/ConversationAPI";
+import { useNavigate } from "react-router";
 
 export default function Rightbar({ userId }) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [friends, setFriends] = useState([]);
     const [followed, setFollowed] = useState(false);
     const { user: currentUser, dispatch } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {
@@ -54,6 +57,22 @@ export default function Rightbar({ userId }) {
         }
     }
 
+    const handleClickMessageButton = async () => {
+        try {
+            const conversationAPI = new ConversationAPI();
+            const newConversation = [
+                currentUser._id,
+                userId
+            ]
+            const res = await conversationAPI.post(newConversation);
+            if (res) {
+                navigate('/messenger');
+            }
+        } catch (e) {
+            Log.exception(e);
+        }
+    }
+
     const HomeRightbar = () => {
         return (
             <>
@@ -81,10 +100,15 @@ export default function Rightbar({ userId }) {
             <>
                 {
                     userId !== currentUser._id && (
-                        <button className="rightbar-follow-button" onClick={handleClickFollowButton}>
-                            {followed ? "Following" : "Follow"}
-                            {followed ? <Remove /> : <Add />}
-                        </button>
+                        <>
+                            <button className="rightbar-follow-button" onClick={handleClickFollowButton}>
+                                {followed ? "Following" : "Follow"}
+                                {followed ? <Remove /> : <Add />}
+                            </button>
+                            <button className="rightbar-follow-button" onClick={handleClickMessageButton}>
+                                Message
+                            </button>
+                        </>
                     )
                 }
                 <h4 className="rightbar-title">User information</h4>

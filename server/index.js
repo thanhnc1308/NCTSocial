@@ -13,6 +13,8 @@ const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
 const mockRoute = require('./routes/mock');
 const fileRoute = require('./routes/file');
+const conversationRouter = require('./routes/conversations');
+const messageRouter = require('./routes/messages');
 
 dotenv.config();
 
@@ -41,6 +43,8 @@ app.use('/api/auth', authRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/mock', mockRoute);
 app.use('/api/file', fileRoute);
+app.use('/api/conversations', conversationRouter);
+app.use('/api/messages', messageRouter);
 
 app.get('/', (req, res) => {
     res.send('hello');
