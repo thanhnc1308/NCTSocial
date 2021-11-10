@@ -8,14 +8,47 @@ import ConversationAPI from '../../api/ConversationAPI';
 import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
 import MessageAPI from '../../api/MessageAPI';
+import { io } from 'socket.io-client';
 
 export default function Messenger() {
     const [conversations, setConversations] = useState([]);
     const [currentConversation, setCurrentConversation] = useState({});
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
+    const [arrivalMessage, setArrivalMessage] = useState('');
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const { user: currentUser } = useContext(AuthContext);
     const refScroll = useRef();
+    const socket = useRef();
+
+    useEffect(() => {
+        // connect socket when first rendered
+        socket.current = io('ws://localhost:8900') // socket server url
+        socket.current.on('getMessage', data => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now()
+            })
+        })
+    }, [])
+
+    useEffect(() => {
+        if (arrivalMessage && currentConversation.members.map(member => member._id).includes(arrivalMessage.sender)) {
+            setMessages((prev) => [...prev, arrivalMessage]);
+        }
+    }, [arrivalMessage, currentConversation])
+
+    useEffect(() => {
+        socket.current.emit('addUser', currentUser._id);
+        socket.current.on('getUsers', (users) => {
+            if (users) {
+                setOnlineUsers(
+                    currentUser.followings.filter((f) => users.some((u) => u.userId === f))
+                );
+            }
+        })
+    }, [currentUser])
 
     useEffect(() => {
         const fetchConversations = async () => {
@@ -60,6 +93,13 @@ export default function Messenger() {
             conversationId: currentConversation._id,
             text: currentMessage
         }
+        const receiverId = currentConversation.members.find(member => member._id !== currentUser._id)
+        socket.current.emit('sendMessage', {
+            senderId: currentUser._id,
+            receiverId: receiverId._id,
+            text: currentMessage
+        })
+
         try {
             const messageAPI = new MessageAPI();
             await messageAPI.post(message);
@@ -79,9 +119,10 @@ export default function Messenger() {
                         <input type="text" placeholder="Search for friends" className="chat-menu-input" />
                         {
                             conversations.map(conversation => (
-                                <div onClick={e => setCurrentConversation(conversation)}>
+                                <div key={conversation._id} onClick={e => setCurrentConversation(conversation)}>
                                     <Conversation
                                         conversation={conversation}
+                                        userId={currentUser._id}
                                         key={conversation._id}
                                     />
                                 </div>
@@ -94,8 +135,8 @@ export default function Messenger() {
                         <div className="chat-box-top">
                             {
                                 messages.map(message => (
-                                    <div ref={refScroll}>
-                                        <Message key={message._id} message={message} own={message.sender === currentUser._id} />
+                                    <div key={message._id} ref={refScroll}>
+                                        <Message message={message} own={message.sender === currentUser._id} />
                                     </div>
                                 ))
                             }
@@ -112,9 +153,11 @@ export default function Messenger() {
                 </div>
                 <div className="chat-online">
                     <div className="chat-online-wrapper">
-                        <ChatOnline/>
-                        <ChatOnline/>
-                        <ChatOnline/>
+                        <ChatOnline
+                            currentUserId={currentUser._id}
+                            onlineUsers={onlineUsers}
+                            setCurrentConversation={setCurrentConversation}
+                        />
                     </div>
                 </div>
             </div>

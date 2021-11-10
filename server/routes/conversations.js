@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Conversation = require('../models/Conversation');
 const Log = require('../utils/Log');
+const User = require('../models/User');
 
 /**
  * Create a new conversation
@@ -23,9 +24,32 @@ router.post('/', async (req, res) => {
  */
 router.get('/:userId', async (req, res) => {
     try {
+        const { userId } = req.params;
         const conversations = await Conversation.find({
-            members: { $in: [req.params.userId]}
+            members: { $in: [userId]}
         })
+        const currentUser = await User.findById(userId);
+        const currentUserView = {
+            _id: currentUser._id,
+            username: currentUser.username,
+            profilePicture: currentUser.profilePicture
+        }
+        for (let conversation of conversations) {
+            const members = [];
+            for (let member of conversation.members) {
+                if (member === userId) {
+                    members.push(currentUserView);
+                } else {
+                    const user = await User.findById(member);
+                    members.push({
+                        _id: user._id,
+                        username: user.username,
+                        profilePicture: user.profilePicture
+                    })
+                }
+            }
+            conversation.members = members;
+        }
         res.status(200).json(conversations);
     } catch (e) {
         Log.exception(e);

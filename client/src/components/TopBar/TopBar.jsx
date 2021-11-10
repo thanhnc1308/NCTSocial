@@ -21,10 +21,10 @@ export default function TopBar() {
                 </div>
             </div>
             <div className="topbar-right d-flex align-items-center">
-                <div className="topbar-links">
+                {/* <div className="topbar-links">
                     <span className="topbar-link pointer">Homepage</span>
                     <span className="topbar-link pointer">Timeline</span>
-                </div>
+                </div> */}
                 <div className="topbar-icons d-flex">
                     <div className="topbar-icon-item pointer">
                         <Person />
