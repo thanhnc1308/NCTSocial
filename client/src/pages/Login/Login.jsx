@@ -23,7 +23,7 @@ export default function Login() {
     e.preventDefault();
     const email = refEmail.current.value;
     const password = refPassword.current.value;
-    authAPI.login({
+    const res = authAPI.login({
       email,
       password
     }, dispatch)
@@ -33,9 +33,9 @@ export default function Login() {
     <div className="login">
       <div className="login-wrapper">
         <div className="login-left">
-          <h3 className="login-logo">Lamasocial</h3>
+          <h3 className="login-logo">NCT</h3>
           <span className="login-desc">
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on NCT.
           </span>
         </div>
         <div className="login-right">

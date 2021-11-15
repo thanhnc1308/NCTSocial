@@ -3,10 +3,13 @@
  */
 import axios from 'axios';
 import { Log } from '../utils/Log';
+import jwt_decode from 'jwt-decode';
 
 class HttpClient {
     instance = null
     service = null
+    token = null
+    refreshToken = null
 
     constructor() {
         if (!HttpClient.instance) {
@@ -25,13 +28,19 @@ class HttpClient {
 
         // request interceptor
         this.service.interceptors.request.use(
-            config => {
-                // do something before request is sent
+            async (config) => {
+                // check token before request is sent
+                const currentDate = Date.now();
+                const decodedToken = jwt_decode(this.token);
+                if (decodedToken.exp * 1000 < currentDate.getTime()) {
+                    const newToken = await this.refreshToken();
+                    this.token = newToken.accessToken;
+                    this.refreshToken = newToken.refreshToken;
+                    localStorage.setItem('token', this.token);
+                    localStorage.setItem('refreshToken', this.refreshToken);
+                }
 
-                // if (store.getters.token) {
-                //     // let each request carry token
-                //     config.headers["Authorization"] = getToken();
-                // }
+                config.headers["Authorization"] = `Bearer ${this.token}`;
                 return config;
             },
             error => {
@@ -96,6 +105,18 @@ class HttpClient {
             return Promise.reject(error);
         }
         );
+    }
+
+    refreshToken() {
+        const url = '';
+        const payload = {
+            refreshToken: this.refreshToken
+        }
+        return this.request({
+            url,
+            method: 'post',
+            data: payload
+        })
     }
 
     request(options) {
