@@ -1,15 +1,16 @@
 import './sidebar.scss';
 import { RssFeed, HelpOutline, WorkOutline, Event, School } from '@mui/icons-material';
 import CloseFriend from '../CloseFriend/CloseFriend';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserAPI from '../../api/UserAPI';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/authSlice';
 
 export default function SideBar() {
     const [friends, setFriends] = useState([]);
-    const { user } = useContext(AuthContext);
+    const user = useSelector(selectUser);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {

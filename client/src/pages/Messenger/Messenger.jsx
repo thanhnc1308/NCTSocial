@@ -3,12 +3,13 @@ import TopBar from '../../components/TopBar/TopBar';
 import Conversation from '../../components/Conversation/Conversation';
 import Message from '../../components/Message/Message';
 import ChatOnline from '../../components/ChatOnline/ChatOnline';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ConversationAPI from '../../api/ConversationAPI';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
 import MessageAPI from '../../api/MessageAPI';
 import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/authSlice';
 
 export default function Messenger() {
     const [conversations, setConversations] = useState([]);
@@ -17,7 +18,7 @@ export default function Messenger() {
     const [currentMessage, setCurrentMessage] = useState('');
     const [arrivalMessage, setArrivalMessage] = useState('');
     const [onlineUsers, setOnlineUsers] = useState([]);
-    const { user: currentUser } = useContext(AuthContext);
+    const currentUser = useSelector(selectUser);
     const refScroll = useRef();
     const socket = useRef();
 

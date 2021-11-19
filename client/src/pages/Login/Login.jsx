@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./login.scss";
-import AuthAPI from '../../api/AuthAPI';
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { login, selectAuth } from "../../redux/authSlice";
 
 export default function Login() {
   // we can use useState here but shouldn't
@@ -11,8 +11,9 @@ export default function Login() {
   // as much as possible
   const refEmail = useRef();
   const refPassword = useRef();
-  const { isFetching, dispatch } = useContext(AuthContext);
-  const authAPI = new AuthAPI();
+  const dispatch = useDispatch();
+  const auth = useSelector(selectAuth);
+  console.log(auth);
 
   useEffect(() => {
     refEmail.current.value = 'ncthanh1@gmail.com';
@@ -23,10 +24,10 @@ export default function Login() {
     e.preventDefault();
     const email = refEmail.current.value;
     const password = refPassword.current.value;
-    const res = authAPI.login({
+    dispatch(login({
       email,
       password
-    }, dispatch)
+    }));
   }
 
   return (
@@ -42,9 +43,9 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="login-box">
             <input ref={refEmail} required placeholder="Email" type="email" className="login-input" />
             <input ref={refPassword} required minLength="6" placeholder="Password" type="password" className="login-input" />
-            <button type="submit" disabled={isFetching} className="login-button">
+            <button type="submit" disabled={auth.loading} className="login-button">
               {
-                isFetching ? <CircularProgress size="20px" /> : 'Log In'
+                auth.loading ? <CircularProgress size="20px" /> : 'Log In'
               }
             </button>
             <span className="login-forgot">Forgot Password?</span>

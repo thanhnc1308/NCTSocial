@@ -1,19 +1,20 @@
 import "./rightbar.scss";
 import Online from "../Online/Online";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserAPI from '../../api/UserAPI';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 import { Log } from '../../utils/Log';
 import { Link } from 'react-router-dom';
 import { Add, Remove } from '@mui/icons-material';
 import ConversationAPI from "../../api/ConversationAPI";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/authSlice";
 
 export default function Rightbar({ userId }) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [friends, setFriends] = useState([]);
     const [followed, setFollowed] = useState(false);
-    const { user: currentUser, dispatch } = useContext(AuthContext);
+    const currentUser = useSelector(selectUser);
     const navigate = useNavigate();
 
     // Fetch posts when finishing rendering Feed component
@@ -40,16 +41,16 @@ export default function Rightbar({ userId }) {
             const userAPI = new UserAPI();
             if (followed) {
                 userAPI.unfollow(currentUser._id, userId);
-                dispatch({
-                    type: 'UNFOLLOW',
-                    payload: userId
-                })
+                // dispatch({
+                //     type: 'UNFOLLOW',
+                //     payload: userId
+                // })
             } else {
                 userAPI.follow(currentUser._id, userId);
-                dispatch({
-                    type: 'FOLLOW',
-                    payload: userId
-                })
+                // dispatch({
+                //     type: 'FOLLOW',
+                //     payload: userId
+                // })
             }
             setFollowed(!followed);
         } catch (e) {

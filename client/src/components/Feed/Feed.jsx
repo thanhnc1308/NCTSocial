@@ -1,13 +1,14 @@
 import Share from '../Share/Share';
 import Post from "../Post/Post";
 import './feed.scss';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PostAPI from '../../api/PostAPI.js';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/authSlice';
 
 export default function Feed({ userId }) {
     const [posts, setPost] = useState([]);
-    const { user: currentUser } = useContext(AuthContext);
+    const currentUser = useSelector(selectUser);
 
     // Fetch posts when finishing rendering Feed component
     useEffect(() => {

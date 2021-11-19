@@ -5,7 +5,6 @@ import "./register.scss";
 import { Log } from '../../utils/Log';
 
 export default function Register() {
-  const authAPI = new AuthAPI();
   const refUsername = useRef();
   const refEmail = useRef();
   const refPassword = useRef();
@@ -30,7 +29,7 @@ export default function Register() {
           email: refEmail.current.value,
           password: refPassword.current.value
         }
-        const res = await authAPI.register(payload);
+        const res = await AuthAPI.register(payload);
         if (res) {
           navigate('/login');
         }

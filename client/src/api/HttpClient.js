@@ -31,16 +31,17 @@ class HttpClient {
             async (config) => {
                 // check token before request is sent
                 const currentDate = Date.now();
-                const decodedToken = jwt_decode(this.token);
-                if (decodedToken.exp * 1000 < currentDate.getTime()) {
-                    const newToken = await this.refreshToken();
-                    this.token = newToken.accessToken;
-                    this.refreshToken = newToken.refreshToken;
-                    localStorage.setItem('token', this.token);
-                    localStorage.setItem('refreshToken', this.refreshToken);
+                if (this.token) {
+                    const decodedToken = jwt_decode(this.token);
+                    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+                        const newToken = await this.refreshToken();
+                        this.token = newToken.accessToken;
+                        this.refreshToken = newToken.refreshToken;
+                        localStorage.setItem('token', this.token);
+                        localStorage.setItem('refreshToken', this.refreshToken);
+                    }
+                    config.headers["Authorization"] = `Bearer ${this.token}`;
                 }
-
-                config.headers["Authorization"] = `Bearer ${this.token}`;
                 return config;
             },
             error => {

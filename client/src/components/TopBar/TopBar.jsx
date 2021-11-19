@@ -1,12 +1,12 @@
 import './top-bar.scss';
 import { Search, Chat, Notifications, Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/authSlice';
 
 export default function TopBar() {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
-    const { user } = useContext(AuthContext);
+    const user = useSelector(selectUser);
     return (
         <div className="topbar-container">
             <div className="topbar-left">

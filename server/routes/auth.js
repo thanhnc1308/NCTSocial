@@ -70,13 +70,23 @@ router.post('/login', async (req, res) => {
         refreshTokens.push(refreshToken);
 
         res.status(200).json({
-            username: user.username,
-            accessToken,
-            refreshToken
+            success: true,
+            data: {
+                username: user.username,
+                userId: user._id,
+                profilePicture: user.profilePicture,
+                followers: user.followers,
+                followings: user.followings,
+                accessToken,
+                refreshToken
+            }
         });
     } catch (e) {
         Log.exception(e);
-        res.status(500).json(e);
+        res.status(500).json({
+            sucess: false,
+            data: e
+        });
     }
 })
 

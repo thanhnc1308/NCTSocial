@@ -1,15 +1,16 @@
 import './share.scss';
 import {PermMedia, Label,Room, EmojiEmotions, Cancel } from '@mui/icons-material';
-import { useContext, useRef, useState } from 'react';
-import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { useRef, useState } from 'react';
 import { Log } from '../../utils/Log';
 import PostAPI from '../../api/PostAPI';
 import FileAPI from '../../api/FileAPI';
+import { selectUser } from '../../redux/authSlice';
+import { useSelector } from 'react-redux';
 
 export default function Share() {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const refDesc = useRef();
-    const { user } = useContext(AuthContext);
+    const user = useSelector(selectUser);
     const [file, setFile] = useState(null);
     const postAPI = new PostAPI();
     const fileAPI = new FileAPI();

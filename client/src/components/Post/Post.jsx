@@ -1,16 +1,17 @@
 import "./post.scss";
 import { MoreVert, ThumbUp } from '@mui/icons-material';
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from 'timeago.js';
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 import { Log } from '../../utils/Log';
 import PostAPI from "../../api/PostAPI";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/authSlice";
 
 export default function Post({ post }) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const [like, setLike] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
-    const { user } = useContext(AuthContext);
+    const user = useSelector(selectUser);
     const postAPI = new PostAPI();
 
     useEffect(() => {

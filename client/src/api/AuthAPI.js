@@ -1,30 +1,20 @@
 import BaseAPI from "./BaseAPI";
 import { Log } from './../utils/Log';
-export default class AuthAPI extends BaseAPI {
+class AuthAPI extends BaseAPI {
     /**
    * prefix of api
    */
     prefix = '/auth';
 
-    async login(userCredentials, dispatch) {
-        dispatch({
-            type: 'LOGIN_START'
-        })
+    async login(userCredentials,) {
         try {
-            const user = await this.request({
+            return await this.request({
                 url: '/login',
                 method: 'post',
                 payload: userCredentials
             })
-            dispatch({
-                type: 'LOGIN_SUCCESS',
-                payload: user
-            })
         } catch (e) {
-            dispatch({
-                type: 'LOGIN_FAILURE',
-                payload: e
-            })
+            return e;
         }
     }
 
@@ -41,3 +31,5 @@ export default class AuthAPI extends BaseAPI {
         }
     }
 }
+
+export default new AuthAPI();
