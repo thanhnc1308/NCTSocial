@@ -13,7 +13,6 @@ export default function Login() {
   const refPassword = useRef();
   const dispatch = useDispatch();
   const auth = useSelector(selectAuth);
-  console.log(auth);
 
   useEffect(() => {
     refEmail.current.value = 'ncthanh1@gmail.com';
