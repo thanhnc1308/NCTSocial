@@ -53,7 +53,7 @@ export default function Post({ post }) {
                 </div>
                 <div className="post-bottom">
                     <div className="post-bottom-left">
-                        <ThumbUp className={`like-icon ${isLiked ? 'liked' : ''}`} onClick={handleClickLike} />
+                        <ThumbUp data-testid="like-button" className={`like-icon ${isLiked ? 'liked' : ''}`} onClick={handleClickLike} />
                         <span className="post-like-counter">{like} people liked it</span>
                     </div>
                     <div className="post-bottom-right">

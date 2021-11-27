@@ -3,8 +3,16 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import { configure } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { server } from './mocks/server';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 configure({
-    adapter: new Adapter()
-})
+    adapter: new Adapter(),
+});
+beforeAll(() =>
+    server.listen({
+        onUnhandledRequest: 'error',
+    })
+);
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
