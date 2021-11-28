@@ -1,6 +1,32 @@
-version: '3.1'
+version: '3.7'
 
 services:
+  nct_social_ui:
+    image: nct_social_ui:r1
+    container_name: nct_social_ui_container
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    # volumes:
+    #   - './:/app'
+    #   - '/app/node_modules'
+    ports:
+      - 8002:80 # Map port 8002 in the server to port 80 in the container
+    networks:
+      - nct_social
+
+  nct_social_server:
+    image: nct_social_server:r1
+    container_name: nct_social_server_container
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 5001:5001
+    networks:
+      - nct_social
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
@@ -15,7 +41,7 @@ services:
     ports:
       - 27017:27017
     networks:
-      - social_media_net
+      - nct_social
     volumes:
       # seeding scripts
       # - ./mongo-entrypoint:/docker-entrypoint-initdb.d
@@ -34,7 +60,7 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=123456
       - ME_CONFIG_MONGODB_URL=mongodb://root:123456@mongo:27017/
     networks:
-      - social_media_net
+      - nct_social
     depends_on:
       - mongo
 
@@ -44,5 +70,5 @@ volumes:
   mongoconfig:
 
 networks:
-  social_media_net:
+  nct_social:
     driver: bridge
