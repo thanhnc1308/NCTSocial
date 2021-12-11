@@ -10,6 +10,7 @@
 ### Frontend
 1. Build the image
 - yarn build
+- Run yarn build again if you change the variables in .env
 - Using docker
     + Go to the directory that has your Dockerfile and run the following command to build the Docker image. The -t flag lets you tag your image so it's easier to find later using the docker images command
     + docker build . --rm -f Dockerfile -t nct_social_ui:r1
@@ -30,7 +31,7 @@
 - docker build . -t nct_social_server:r1
 - docker-compose build nct_social_server
 2. Run the image
-- docker run -p 49160:8080 -d nct_social_server:r1
+- docker run --env-file=.env.dev --rm -p 49160:8080 nct_social_server:r1
 - docker-compose up nct_social_server
 ### Debug
 - docker exec -it <mycontainer> bash

@@ -1,2 +1,8 @@
 node_modules
 npm-debug.log
+Dockerfile
+build.sh
+clean.sh
+run.sh
+stop.sh
+README.md

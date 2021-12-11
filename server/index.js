@@ -50,6 +50,7 @@ app.get('/', (req, res) => {
     res.send('hello');
 })
 
-app.listen(8888, () => {
-    Log.info("Database connected!")
+app.listen(process.env.PORT || 8080, () => {
+    Log.info(`Server is running at port ${process.env.PORT}`);
+    Log.info(`NODE_ENV: ${process.env.NODE_ENV}`);
 })
