@@ -26,12 +26,15 @@
     + docker-compose --env-file client/.env.dev up nct_social_ui
 ### Database
 - docker-compose up mongo mongo-express
+- Login to the database: mongo -u root -p 123456 --authenticationDatabase admin
+- Create an user: db.createUser({user:"writetApp", pwd:"writeApp", roles:[{role:"dbOwner", db:"social_media_app"}]});
+- Get all users: db.getUsers();
 ### Backend
 1. Build the image
 - docker build . -t nct_social_server:r1
 - docker-compose build nct_social_server
 2. Run the image
 - docker run --env-file=.env.dev --rm -p 49160:8080 nct_social_server:r1
-- docker-compose up nct_social_server
+- docker-compose --env-file server/.env.dev up nct_social_server
 ### Debug
 - docker exec -it <mycontainer> bash

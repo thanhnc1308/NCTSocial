@@ -14,8 +14,8 @@ router.post('/register', async (req, res) => {
         const newUser = new User({
             username,
             email,
-            password: hashedPassword
-        })
+            password: hashedPassword,
+        });
 
         // save user
         const user = await newUser.save();
@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
         Log.exception(e);
         res.status(500).json(e);
     }
-})
+});
 
 // TODO: save refresh token in database or cache
 const refreshTokens = [];
@@ -32,23 +32,23 @@ const refreshTokens = [];
 const generateAccessToken = (user) => {
     return jwt.sign(
         {
-            id: user._id
+            id: user._id,
         },
         process.env.JWT_SECRET_KEY,
         {
-            expiresIn: '30m'
+            expiresIn: '30m',
         }
-    )
-}
+    );
+};
 
 const generateRefreshToken = (user) => {
     return jwt.sign(
         {
-            id: user._id
+            id: user._id,
         },
         process.env.JWT_SECRET_KEY
-    )
-}
+    );
+};
 
 router.post('/login', async (req, res) => {
     try {
@@ -57,38 +57,41 @@ router.post('/login', async (req, res) => {
 
         if (!user) {
             res.status(404).json('User not found');
-        }
+        } else {
+            const isValidPassword = await bcrypt.compare(
+                password,
+                user.password
+            );
+            if (!isValidPassword) {
+                res.status(400).json('Wrong username or password');
+            } else {
+                const accessToken = generateAccessToken(user);
+                const refreshToken = generateRefreshToken(user);
+                // save refresh token
+                refreshTokens.push(refreshToken);
 
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            res.status(400).json('Wrong username or password');
-        }
-
-        const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-        // save refresh token
-        refreshTokens.push(refreshToken);
-
-        res.status(200).json({
-            success: true,
-            data: {
-                username: user.username,
-                userId: user._id,
-                profilePicture: user.profilePicture,
-                followers: user.followers,
-                followings: user.followings,
-                accessToken,
-                refreshToken
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        username: user.username,
+                        userId: user._id,
+                        profilePicture: user.profilePicture,
+                        followers: user.followers,
+                        followings: user.followings,
+                        accessToken,
+                        refreshToken,
+                    },
+                });
             }
-        });
+        }
     } catch (e) {
         Log.exception(e);
         res.status(500).json({
-            sucess: false,
-            data: e
+            success: false,
+            data: e,
         });
     }
-})
+});
 
 router.post('/refresh', (req, res) => {
     try {
@@ -98,41 +101,39 @@ router.post('/refresh', (req, res) => {
         }
 
         if (!refreshTokens.includes(refreshToken)) {
-            return res.status(403).json('Refresh token is not valid!')
+            return res.status(403).json('Refresh token is not valid!');
         }
 
-        jwt.verify(
-            refreshToken,
-            process.env.JWT_SECRET_KEY,
-            (err, user) => {
-                if (err) {
-                    return res.status(400).json(err);
-                }
-
-                // remove old refresh token
-                refreshTokens = refreshTokens.filter(token => token !== refreshToken);
-
-                const newAccessToken = generateAccessToken(user);
-                const newRefreshToken = generateRefreshToken(user);
-                refreshTokens.push(newRefreshToken);
-
-                return res.status(200).json({
-                    accessToken: newAccessToken,
-                    refreshToken: newRefreshToken
-                })
+        jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, (err, user) => {
+            if (err) {
+                return res.status(400).json(err);
             }
-        )
+
+            // remove old refresh token
+            refreshTokens = refreshTokens.filter(
+                (token) => token !== refreshToken
+            );
+
+            const newAccessToken = generateAccessToken(user);
+            const newRefreshToken = generateRefreshToken(user);
+            refreshTokens.push(newRefreshToken);
+
+            return res.status(200).json({
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            });
+        });
     } catch (e) {
         Log.exception(e);
-        res.status(500).json(e);
+        return res.status(500).json(e);
     }
-})
+});
 
 router.post('/logout', verifyToken, (req, res) => {
     const { refreshToken } = req.body;
     // remove refreshToken
-    refreshTokens = refreshTokens.filter(token => token !== refreshToken);
-    res.status(200).json('You logged out successfully');
-})
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+    return res.status(200).json('You logged out successfully');
+});
 
 module.exports = router;

@@ -21,8 +21,13 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MONGO_URL=${MONGO_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - PORT=${PORT}
     ports:
-      - 5001:5001
+      - 49160:8080
     networks:
       - nct_social
     depends_on:
@@ -31,11 +36,11 @@ services:
   mongo:
     image: mongo
     container_name: mongodb_container
-    # If you need to connect to your db from outside this container 
+    # If you need to connect to your db from outside this container
     # network_mode: host
     command: mongod
     environment:
-      - MONGO_INITDB_DATABASE=social_media_app2
+      - MONGO_INITDB_DATABASE=social_media_app
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
     ports:

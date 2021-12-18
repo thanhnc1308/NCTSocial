@@ -18,17 +18,25 @@ const messageRouter = require('./routes/messages');
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // useCreateIndex: true
-})
-.then(() => {
-    Log.info("Database connected!")
-})
-.catch(err => {
-    Log.exception(err);
-});
+const connect = (reTry = true) => {
+    mongoose.connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        // useCreateIndex: true
+    })
+    .then(() => {
+        Log.info("Database connected!")
+    })
+    .catch(err => {
+        Log.exception(err);
+        if (reTry) {
+            setTimeout(() => {
+                connect(false);
+            }, 5000);
+        }
+    });
+}
+connect(false);
 
 // middleware
 app.use(express.json()); // body parser
@@ -53,4 +61,5 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8080, () => {
     Log.info(`Server is running at port ${process.env.PORT}`);
     Log.info(`NODE_ENV: ${process.env.NODE_ENV}`);
+    Log.info(`MONGO_URL: ${process.env.MONGO_URL}`);
 })
