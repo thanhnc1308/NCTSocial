@@ -33,6 +33,21 @@ services:
     depends_on:
       - mongo
 
+    nct_social_socket:
+      image: nct_social_socket:r1
+      container_name: nct_social_socket_container
+      build:
+        context: ./socket
+        dockerfile: Dockerfile
+      environment:
+        - NODE_ENV=${NODE_ENV}
+        - CLIENT_URL=${CLIENT_URL}
+        - PORT=${PORT}
+      ports:
+        - 49160:8080
+      networks:
+        - nct_social
+
   mongo:
     image: mongo
     container_name: mongodb_container
@@ -71,9 +86,10 @@ services:
 
 volumes:
   # default dir on Ubuntu: /var/lib/docker/volumes
-  mongodb:
+  mongodb: null
   mongoconfig:
 
+    null
 networks:
   nct_social:
     driver: bridge

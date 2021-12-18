@@ -36,5 +36,12 @@
 2. Run the image
 - docker run --env-file=.env.dev --rm -p 49160:8080 nct_social_server:r1
 - docker-compose --env-file server/.env.dev up nct_social_server
+### Socket
+1. Build the image
+- docker build . -t nct_social_socket:r1
+- docker-compose build nct_social_socket
+2. Run the image
+- docker run --env-file=.env.dev --rm -p 8900:8900 nct_social_socket:r1
+- docker-compose --env-file socket/.env.dev up nct_social_socket
 ### Debug
 - docker exec -it <mycontainer> bash

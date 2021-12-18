@@ -15,7 +15,7 @@ export default function Login() {
   const auth = useSelector(selectAuth);
 
   useEffect(() => {
-    refEmail.current.value = 'ncthanh1@gmail.com';
+    refEmail.current.value = 'ncthanh@gmail.com';
     refPassword.current.value = '123456';
   }, [])
 
