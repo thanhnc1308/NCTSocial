@@ -27,6 +27,7 @@
 ### Database
 - docker-compose up mongo mongo-express
 - Login to the database: mongo -u root -p 123456 --authenticationDatabase admin
+- Connect to a remote database: mongo host:port/database -u username -p password
 - Create an user: db.createUser({user:"writetApp", pwd:"writeApp", roles:[{role:"dbOwner", db:"social_media_app"}]});
 - Get all users: db.getUsers();
 ### Backend
