@@ -1,9 +1,10 @@
-# A simple social media app built with Node.js, ReactJS, MongoDB, Socket.IO
+# A simple social media app
+A small project I used to study Node.js, ReactJS, MongoDB, Socket.IO, K8s and Jenkins.
 ## Main features
 - CRUD posts
-- Like and comment on a post
+- Like posts
 - Follow an user
-- Realtime chat with image uploading
+- Realtime chat
 - Check online users
 
 ## Build the app using Docker
@@ -44,5 +45,8 @@
 2. Run the image
 - docker run --env-file=.env.dev --rm -p 8900:8900 nct_social_socket:r1
 - docker-compose --env-file socket/.env.dev up nct_social_socket
+### Jenkins
+- Run jenkins.sh
+- Run docker logs CONTAINER_ID or go to /var/jenkins_home/secrets/initialAdminPassword to get the password
 ### Debug
 - docker exec -it <mycontainer> bash
