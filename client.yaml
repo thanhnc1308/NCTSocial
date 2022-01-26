@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+  labels:
+    app: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: nct_social_ui:r2
+          imagePullPolicy: Never
+          command: [ "echo", "SUCCESS" ]
+          ports:
+            - containerPort: 8081
+          env:
+            - name: REACT_APP_PUBLIC_FOLDER
+              valueFrom:
+                configMapKeyRef:
+                  name: client-configmap
+                  key: REACT_APP_PUBLIC_FOLDER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-service
+spec:
+  selector:
+    app: client
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30002 # nodePort must be in range of 30000
